@@ -1,0 +1,440 @@
+<div class="resume-analyzer">
+
+  <!-- ========================= -->
+  <!-- HEADER -->
+  <!-- ========================= -->
+
+  <header class="top-bar">
+
+    <div class="brand">
+      <div class="brand-icon">✦</div>
+
+      <div>
+        <h2>ResumeAI</h2>
+        <span>Smart Career Assistant</span>
+      </div>
+    </div>
+
+    <button type="button" class="logout-btn" (click)="logout()">
+      Logout
+    </button>
+
+  </header>
+
+
+  <!-- ========================= -->
+  <!-- HERO -->
+  <!-- ========================= -->
+
+  <section class="hero">
+
+    <div class="hero-badge">
+      ✨ AI-Powered Resume Matching
+    </div>
+
+    <h1>
+      Find out how well your
+      <span>resume matches</span>
+      a job
+    </h1>
+
+    <p>
+      Upload your resume, paste a job description,
+      and let AI identify your strengths and skill gaps.
+    </p>
+
+  </section>
+
+
+  <!-- ========================= -->
+  <!-- MAIN CONTENT -->
+  <!-- ========================= -->
+
+  <div class="main-content">
+
+
+    <!-- ========================= -->
+    <!-- UPLOAD RESUME CARD -->
+    <!-- ========================= -->
+
+    <section class="card upload-card">
+
+      <div class="card-header">
+
+        <div class="card-icon upload-icon">
+          📄
+        </div>
+
+        <div>
+          <h2>Upload Resume</h2>
+
+          <p>
+            Upload your latest resume in PDF format.
+          </p>
+        </div>
+
+      </div>
+
+
+      <div class="upload-area">
+
+        <div class="upload-symbol">
+          ↑
+        </div>
+
+        <h3>
+          Choose your resume
+        </h3>
+
+        <p>
+          PDF files only
+        </p>
+
+        <input id="resumeFile" type="file" accept=".pdf" (change)="onFileSelected($event)" />
+
+        <label for="resumeFile" class="choose-file-btn">
+          Choose PDF
+        </label>
+
+      </div>
+
+
+      @if (selectedFile) {
+
+      <div class="selected-file">
+
+        <span class="file-icon">
+          📄
+        </span>
+
+        <div class="file-info">
+
+          <strong>
+            {{ selectedFile.name }}
+          </strong>
+
+          <span>
+            Ready to upload
+          </span>
+
+        </div>
+
+        <span class="check-icon">
+          ✓
+        </span>
+
+      </div>
+
+      }
+
+
+      <button type="button" class="primary-btn" (click)="uploadResume()" [disabled]="isUploading">
+
+        {{ isUploading
+        ? 'Uploading Resume...'
+        : 'Upload Resume'
+        }}
+
+      </button>
+
+    </section>
+
+
+
+    <!-- ========================= -->
+    <!-- JOB DESCRIPTION CARD -->
+    <!-- ========================= -->
+
+    <section class="card job-section">
+
+      <div class="card-header">
+
+        <div class="card-icon job-icon">
+          💼
+        </div>
+
+        <div>
+
+          <h2>
+            Job Description
+          </h2>
+
+          <p>
+            Paste the job description you want to apply for.
+          </p>
+
+        </div>
+
+      </div>
+
+
+      <label for="jobDescription">
+        Job Description
+      </label>
+
+      <textarea id="jobDescription" [(ngModel)]="jobDescription" rows="12"
+        placeholder="Paste the job description here...
+
+Example:
+We are looking for a .NET Full Stack Developer with experience in C#, ASP.NET Core, Web API, SQL Server, Angular and Azure..."></textarea>
+
+
+      <div class="character-info">
+        <span>
+          Provide the complete job description for better results.
+        </span>
+      </div>
+
+
+      <button type="button" class="primary-btn" (click)="analyzeJob()" [disabled]="isJobAnalyzing">
+
+        {{ isJobAnalyzing
+        ? 'Analyzing Job Match...'
+        : 'Analyze Job Match →'
+        }}
+
+      </button>
+
+    </section>
+
+  </div>
+
+
+  <!-- ========================= -->
+  <!-- ERROR MESSAGE -->
+  <!-- ========================= -->
+
+  @if (errorMessage) {
+
+  <div class="error-message">
+
+    <span>⚠</span>
+
+    {{ errorMessage }}
+
+  </div>
+
+  }
+
+
+  <!-- ========================= -->
+  <!-- JOB MATCH RESULT -->
+  <!-- ========================= -->
+
+  @if (jobMatch) {
+
+  <section class="results-section">
+
+    <div class="results-heading">
+
+      <div>
+
+        <div class="result-badge">
+          ✨ AI Analysis Complete
+        </div>
+
+        <h2>
+          Your Job Match Result
+        </h2>
+
+        <p>
+          Here's how well your resume matches this position.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- MATCH SCORE -->
+    <!-- ========================= -->
+
+    <div class="score-card">
+
+      <div class="score-circle" [style.--match]="jobMatch.matchPercentage + '%'">
+
+        <div>
+
+          <strong>
+            {{ jobMatch.matchPercentage }}%
+          </strong>
+
+          <span>
+            Match
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <div class="score-content">
+
+        <h3>
+          Resume Compatibility
+        </h3>
+
+        <p>
+          Your resume matches
+          <strong>
+            {{ jobMatch.matchPercentage }}%
+          </strong>
+          of the requirements identified in this job description.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- SKILLS -->
+    <!-- ========================= -->
+
+    <div class="skills-grid">
+
+
+      <!-- MATCHED SKILLS -->
+
+      <div class="result-card matched-card">
+
+        <div class="result-card-title">
+
+          <span class="result-icon matched-icon">
+            ✓
+          </span>
+
+          <div>
+
+            <h3>
+              Matched Skills
+            </h3>
+
+            <span>
+              Skills you already have
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-list">
+
+          @for (
+          skill of jobMatch.matchedSkills;
+          track skill
+          ) {
+
+          <span class="skill matched-skill">
+            ✓ {{ skill }}
+          </span>
+
+          }
+
+        </div>
+
+      </div>
+
+
+      <!-- MISSING SKILLS -->
+
+      <div class="result-card missing-card">
+
+        <div class="result-card-title">
+
+          <span class="result-icon missing-icon">
+            !
+          </span>
+
+          <div>
+
+            <h3>
+              Missing Skills
+            </h3>
+
+            <span>
+              Skills you should consider learning
+            </span>
+
+          </div>
+
+        </div>
+
+
+        <div class="skill-list">
+
+          @for (
+          skill of jobMatch.missingSkills;
+          track skill
+          ) {
+
+          <span class="skill missing-skill">
+            + {{ skill }}
+          </span>
+
+          }
+
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- ========================= -->
+    <!-- SUGGESTIONS -->
+    <!-- ========================= -->
+
+    <div class="suggestions-card">
+
+      <div class="suggestions-header">
+
+        <span class="suggestion-icon">
+          💡
+        </span>
+
+        <div>
+
+          <h3>
+            AI Suggestions
+          </h3>
+
+          <span>
+            Improve your resume for this specific job
+          </span>
+
+        </div>
+
+      </div>
+
+
+      <ul>
+
+        @for (
+        suggestion of jobMatch.suggestions;
+        track suggestion
+        ) {
+
+        <li>
+
+          <span>
+            →
+          </span>
+
+          {{ suggestion }}
+
+        </li>
+
+        }
+
+      </ul>
+
+    </div>
+
+  </section>
+
+  }
+
+</div>
