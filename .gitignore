@@ -1,0 +1,23 @@
+# .NET
+**/bin/
+**/obj/
+*.user
+*.suo
+
+# Angular
+**/node_modules/
+**/.angular/
+**/dist/
+
+# Visual Studio
+.vs/
+
+# Environment / secrets
+.env
+appsettings.Development.json
+
+# Uploaded files
+**/Uploads/*
+
+# Logs
+*.log

@@ -1,0 +1,6 @@
+@ResumeAI_HostAddress = http://localhost:5210
+
+GET {{ResumeAI_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
