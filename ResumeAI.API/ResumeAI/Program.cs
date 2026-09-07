@@ -19,7 +19,10 @@ builder.Services.AddCors(options =>
     {
         policy.SetIsOriginAllowed(origin =>
         {
-            return new Uri(origin).Host == "localhost";
+            var host = new Uri(origin).Host;
+
+            return host == "localhost" ||
+                   host.EndsWith(".vercel.app");
         })
         .AllowAnyHeader()
         .AllowAnyMethod();
@@ -27,7 +30,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlServer(
+    options.UseNpgsql(
         builder.Configuration.GetConnectionString("DefaultConnection")
     ));
 
