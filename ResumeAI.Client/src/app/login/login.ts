@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../services/auth';
 import { Router } from '@angular/router';
@@ -20,7 +20,8 @@ export class LoginComponent {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private cdr: ChangeDetectorRef,
   ) {}
 
   login() {
@@ -28,13 +29,21 @@ export class LoginComponent {
   this.message = '';
   this.errorMessage = '';
 
+  if (!this.email.trim()) {
+    this.errorMessage = 'Email is required.';
+    return;
+  }
+
+  if (!this.password.trim()) {
+    this.errorMessage = 'Password is required.';
+    return;
+  }
+
   this.authService
     .login(this.email, this.password)
     .subscribe({
 
       next: (response) => {
-
-        console.log(response);
 
         localStorage.setItem('token', response.token);
 
@@ -47,8 +56,10 @@ export class LoginComponent {
 
         console.error(error);
 
-        this.errorMessage = 'Invalid email or password.';
+        // alert('ERROR CALLBACK WORKED');
 
+        this.errorMessage = 'Invalid email or password.';
+        this.cdr.detectChanges();
       }
 
     });

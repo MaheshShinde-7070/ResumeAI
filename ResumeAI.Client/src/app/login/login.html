@@ -4,8 +4,10 @@
 
   <form (ngSubmit)="login()">
 
+    <!-- Email -->
     <div>
       <label>Email</label>
+
       <input
         type="email"
         name="email"
@@ -14,8 +16,11 @@
       />
     </div>
 
+
+    <!-- Password -->
     <div>
       <label>Password</label>
+
       <input
         type="password"
         name="password"
@@ -24,16 +29,30 @@
       />
     </div>
 
-    @if (errorMessage) {
-      <div class="error-message">
-        {{ errorMessage }}
-      </div>
-    }
 
+    <!-- Login Button -->
     <button type="submit">
       Login
     </button>
 
   </form>
+
+
+  <!-- Error Message -->
+  <div
+    *ngIf="errorMessage"
+    class="error-message"
+  >
+    {{ errorMessage }}
+  </div>
+
+
+  <!-- Success Message -->
+  <div
+    *ngIf="message"
+    class="success-message"
+  >
+    {{ message }}
+  </div>
 
 </div>
